@@ -3,6 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 
+torch.manual_seed(0)
+
 class PatcheEmbedding(nn.Module):
     def __init__(self, image_size: tuple[int, int, int, int], patch_size: int, projection_dim: int):
         super(PatcheEmbedding, self).__init__()
@@ -13,6 +15,7 @@ class PatcheEmbedding(nn.Module):
 
         self.projection = nn.Linear(self.channels*self.patch_size*self.patch_size, projection_dim)
         self.projection_embedding = nn.Embedding(self.num_patches, projection_dim)
+        self.class_token = nn.Parameter(torch.rand(1, self.hidden_d))
 
     def forward(self, images: torch.Tensor) -> torch.Tensor:
         
